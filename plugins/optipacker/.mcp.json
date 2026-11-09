@@ -1,0 +1,5 @@
+{
+  "mcpServers": {
+    "optipacker": { "type": "http", "url": "https://optipacker.com/api/mcp" }
+  }
+}
