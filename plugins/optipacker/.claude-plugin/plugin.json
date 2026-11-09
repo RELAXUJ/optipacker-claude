@@ -1,9 +1,13 @@
 {
   "name": "optipacker",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Discover containers, import STL parts and prepare saved packing comparisons in OptiPacker.",
-  "author": { "name": "OptiPacker", "url": "https://optipacker.com" },
+  "author": {
+    "name": "OptiPacker",
+    "url": "https://optipacker.com"
+  },
   "homepage": "https://optipacker.com",
   "repository": "https://github.com/RELAXUJ/optipacker-claude",
-  "license": "MIT"
+  "license": "MIT",
+  "privacyPolicyUrl": "https://optipacker.com/privacy"
 }

@@ -1,7 +1,16 @@
 {
   "name": "optipacker",
-  "owner": { "name": "OptiPacker", "url": "https://optipacker.com" },
+  "owner": {
+    "name": "OptiPacker",
+    "url": "https://optipacker.com"
+  },
   "plugins": [
-    { "name": "optipacker", "source": "./plugins/optipacker", "description": "Use OptiPacker's project-scoped MCP tools to import STL parts and compare packing proposals.", "version": "0.1.0" }
-  ]
+    {
+      "name": "optipacker",
+      "source": "./plugins/optipacker",
+      "description": "Use OptiPacker's project-scoped MCP tools to import STL parts and compare packing proposals.",
+      "version": "0.1.1"
+    }
+  ],
+  "description": "OptiPacker skills and its project-scoped MCP connector for Claude."
 }
