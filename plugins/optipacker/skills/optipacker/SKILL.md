@@ -67,7 +67,9 @@ No separate financial-only organization role exists in the current app. Financia
 
 Use sparse what-if assumptions to answer a question such as lower demand or higher replacement costs. For tray or insert replacement, copy `materialId` from `assumptions.materials[]` and use `returnableSystemCosts.bomReplacementRates`; the global replacement rate skips inserts and trays. Read the what-if reference before constructing these overrides. Label changed assumptions and keep the original next to the preview. Previewing does not save, adopt packing or update project settings. A different packing layout needs another evaluated option or a new packing run.
 
-When useful, call `get_visualization` to show an ROI comparison chart or stored part placement bounds directly in chat. Include the accessible figures and review link. Explain an unavailable image from its returned reason. The packing image shows part position bounds; tray bodies, cavities and part meshes are not drawn. Keep engineering pending visible beside a protective tray image. Bulk estimates have no invented placements.
+When useful, call `get_visualization` for an ROI comparison chart or stored part placement bounds. The native PNG is delivered in the tool result. In Claude web, tell the member to expand that tool result to view it. Use "attached" or "below" only when you have created a separate message attachment. Include the accessible figures and review link.
+
+Explain an unavailable image from its returned reason. The packing image shows part position bounds; tray bodies, cavities and part meshes are not drawn. Keep engineering pending visible beside a protective tray image. Bulk estimates have no invented placements.
 
 After the comparison, offer the actions that the response makes available: keep exploring, review on the website, explicitly save the named ROI scenario, or continue to demand planning. Call `save_roi_scenario` only when the member asks to save. Reuse its idempotency key after an uncertain response. Return the saved analysis link.
 

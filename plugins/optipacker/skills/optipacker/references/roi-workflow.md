@@ -32,6 +32,8 @@ The returned average annual net cashflow, ROI, investment and break-even belong 
 
 Call `get_visualization` with `kind: "roi"` and the same scenarios to obtain a comparison chart. Use `kind: "packing"` with the saved proposal reference and candidate ID for stored part position bounds. The MCP returns an image content block plus accessible metadata. Show the image with its figures and review link. Tray bodies and cavities are not drawn. Retain returned `packingContext`, including the protective tray specification and engineering pending status, beside images, financial previews and saved ROI.
 
+In Claude web, direct the member to expand the tool result to open its native image preview. Use "attached" or "below" only for a separate message attachment you have created. Keep the figures and review link in the response when the client shows the image only in the tool preview.
+
 If the response says the image is unavailable, use its reason and link. Do not make up a layout for a bulk estimate or describe a bounds view as a mesh render. Rendering an image uses no proposal allowance run.
 
 ## Save and hand off

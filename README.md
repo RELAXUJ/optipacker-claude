@@ -39,6 +39,8 @@ An older connection needs renewed consent for `models:write` or `containers:writ
 
 ROI retrieval, comparison and financial images require optional `roi:read` consent. Saving requires `roi:write` and current project write access. Existing connections must reconnect to grant them. ROI comparisons reuse saved packing and consume no proposal run. What-if is a preview until explicitly saved. Unadopted options can be compared, then adopted on the website before saving an operational ROI analysis. Demand planning remains a separate website action.
 
+Native PNG images are returned in tool results. In Claude web, expand the visualization tool result to open the image preview. A separate image attachment in the assistant's final answer depends on the client; the skill directs Claude to the tool preview when it has not created that attachment.
+
 Preparation, catalogue reads and imports consume no proposal run. A completed comparison consumes one run even when no feasible option exists. The member confirms the effective engineering checks before the run. Claude reports estimates, unknown costs and search limits. Proposal adoption remains on the OptiPacker website.
 
 ## Build and verify
