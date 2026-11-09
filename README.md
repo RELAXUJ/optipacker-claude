@@ -1,6 +1,6 @@
 # OptiPacker for Claude
 
-A Claude skill and Claude Code plugin for working with project-scoped OptiPacker packing proposals. Available tools depend on the deployed connector, your organization role and your consent.
+A Claude skill and Claude Code plugin for project-scoped packing proposals, ROI comparisons and what-if scenarios. Available tools depend on the deployed connector, your organization role and your consent.
 
 ## Claude web and desktop
 
@@ -26,6 +26,9 @@ Open `/mcp` to authenticate the OptiPacker server. The plugin includes the remot
 - “Save this STL in my selected project. The source units are mm and the measured part weight is 120 g.”
 - “Recommend a returnable container for this part, run the packing comparison, and explain why.”
 - “Compare the recommended packing with the current saved configuration.”
+- “Compare the ROI of these packing options before I choose one, and show the cashflow chart.”
+- “What if annual demand falls? Keep the original scenario beside that preview.”
+- “Save this ROI scenario and give me its review link. I will decide about demand planning later.”
 - “Create this custom returnable box from my supplied specification, then compare packing this part in it.”
 
 Claude recommends catalogue containers first. Custom container creation requires an organization administrator and supplied engineering facts. It creates a container record for packing, not a manufactured design. The connector lists accessible definitions; it does not track physical stock counts.
@@ -33,6 +36,8 @@ Claude recommends catalogue containers first. Custom container creation requires
 STL transfer needs file/code tools and HTTPS access to the signed storage URL. Before saving, Claude asks for source units and measured part weight, shows material options, and requires a material and cost choice. Enter a part price or explicitly accept the shown raw-material estimate, which excludes manufacturing. Completion prepares the retained mesh for the website viewer and packing. The current limit is 4 MiB with closed geometry.
 
 An older connection needs renewed consent for `models:write` or `containers:write`; existing grants keep their original permissions. Refresh the connector's tools list after an upgrade, then start a new chat. Older chats can retain the earlier tool list.
+
+ROI retrieval, comparison and financial images require optional `roi:read` consent. Saving requires `roi:write` and current project write access. Existing connections must reconnect to grant them. ROI comparisons reuse saved packing and consume no proposal run. What-if is a preview until explicitly saved. Unadopted options can be compared, then adopted on the website before saving an operational ROI analysis. Demand planning remains a separate website action.
 
 Preparation, catalogue reads and imports consume no proposal run. A completed comparison consumes one run even when no feasible option exists. The member confirms the effective engineering checks before the run. Claude reports estimates, unknown costs and search limits. Proposal adoption remains on the OptiPacker website.
 

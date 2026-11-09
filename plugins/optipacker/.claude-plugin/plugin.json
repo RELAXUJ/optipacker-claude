@@ -1,7 +1,7 @@
 {
   "name": "optipacker",
-  "version": "0.2.0",
-  "description": "Discover containers, import STL parts and prepare saved packing comparisons in OptiPacker.",
+  "version": "0.3.0",
+  "description": "Compare packing and ROI, explore what-if scenarios, view charts and save financial scenarios in OptiPacker.",
   "author": {
     "name": "OptiPacker",
     "url": "https://optipacker.com"
