@@ -1,6 +1,6 @@
 # OptiPacker for Claude
 
-A Claude skill and Claude Code plugin for working with project-scoped OptiPacker packing proposals. Available tools depend on the deployed connector and your consent. The extended upload and container tools are implemented on OptiPacker's development branch and require a production release before they appear on optipacker.com.
+A Claude skill and Claude Code plugin for working with project-scoped OptiPacker packing proposals. Available tools depend on the deployed connector, your organization role and your consent.
 
 ## Claude web and desktop
 
@@ -30,7 +30,9 @@ Open `/mcp` to authenticate the OptiPacker server. The plugin includes the remot
 
 Claude recommends catalogue containers first. Custom container creation requires an organization administrator and supplied engineering facts. It creates a container record for packing, not a manufactured design. The connector lists accessible definitions; it does not track physical stock counts.
 
-STL transfer needs file/code tools and HTTPS access to the signed storage URL. Claude asks for source units and measured part weight. The current import path accepts STL files up to 4 MiB and requires closed geometry. An older connection needs renewed consent for `models:write` or `containers:write`; existing grants keep their original permissions.
+STL transfer needs file/code tools and HTTPS access to the signed storage URL. Before saving, Claude asks for source units and measured part weight, shows material options, and requires a material and cost choice. Enter a part price or explicitly accept the shown raw-material estimate, which excludes manufacturing. Completion prepares the retained mesh for the website viewer and packing. The current limit is 4 MiB with closed geometry.
+
+An older connection needs renewed consent for `models:write` or `containers:write`; existing grants keep their original permissions. Refresh the connector's tools list after an upgrade, then start a new chat. Older chats can retain the earlier tool list.
 
 Preparation, catalogue reads and imports consume no proposal run. A completed comparison consumes one run even when no feasible option exists. The member confirms the effective engineering checks before the run. Claude reports estimates, unknown costs and search limits. Proposal adoption remains on the OptiPacker website.
 

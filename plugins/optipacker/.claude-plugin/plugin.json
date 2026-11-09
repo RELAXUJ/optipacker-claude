@@ -1,6 +1,6 @@
 {
   "name": "optipacker",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Discover containers, import STL parts and prepare saved packing comparisons in OptiPacker.",
   "author": {
     "name": "OptiPacker",

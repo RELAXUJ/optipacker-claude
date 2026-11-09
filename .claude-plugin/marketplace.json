@@ -9,7 +9,7 @@
       "name": "optipacker",
       "source": "./plugins/optipacker",
       "description": "Use OptiPacker's project-scoped MCP tools to import STL parts and compare packing proposals.",
-      "version": "0.1.2"
+      "version": "0.2.0"
     }
   ],
   "description": "OptiPacker skills and its project-scoped MCP connector for Claude."

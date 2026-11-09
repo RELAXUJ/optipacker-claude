@@ -25,7 +25,9 @@ For a requested custom box, read [references/custom-container.md](references/cus
 
 ## Import an STL attachment
 
-When the member asks to save an attached STL in OptiPacker, read [references/stl-upload.md](references/stl-upload.md). Use `prepare_stl_upload`, a signed PUT transfer of the attachment bytes, then `complete_stl_upload`. Use the returned model ID and revision in preparation. Ask for the source length unit and measured part weight. STL contains neither fact.
+When the member asks to save an attached STL in OptiPacker, read [references/stl-upload.md](references/stl-upload.md). Before saving, require source units, measured part weight, a material chosen from `list_materials`, and a part-cost decision. Offer an entered part price or a displayed raw-material estimate for explicit acceptance. Explain that the estimate excludes manufacturing. Ask for missing choices together; never fill them from a filename or assume zero.
+
+Use `prepare_stl_upload`, a signed PUT transfer of the unchanged attachment bytes, then `complete_stl_upload`. Completion prepares the retained mesh for the website and packing. Check its mesh status before claiming the part is ready. Use the final returned model ID and revision in preparation.
 
 ## Prepare, confirm and run
 
