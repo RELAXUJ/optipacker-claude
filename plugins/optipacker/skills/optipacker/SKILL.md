@@ -39,6 +39,8 @@ For a protective tray, obtain outer and cavity dimensions, rows and columns, wal
 
 Read the returned review brief to the member: programme years and volumes, productive days, part size and weight, gaps and clearances, rotation, loop stages, requirements, baseline, material assumptions, cost coverage and exchange rate. Obtain the four engineering confirmations for the effective quoted values. Do not infer confirmation from a different run or invent it.
 
+`exchangeRate.usdRate` is organization-currency units per 1 USD. State it as `1 USD = usdRate currency`; divide an organization-currency price by that rate to enter USD.
+
 Preparation, discovery and asset imports use no allowance run. A completed proposal consumes one run, including an unranked, truncated or no-feasible-option result. Call `run_proposal` with the quote, confirmed checks and one idempotency key. Reuse that key for uncertain retries of the same request. Poll `get_job` no faster than every two seconds. Retrieve `get_proposal` when saved. For a source change, read the changed sources and prepare a new quote.
 
 ## Explain the result
