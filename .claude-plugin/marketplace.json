@@ -9,7 +9,7 @@
       "name": "optipacker",
       "source": "./plugins/optipacker",
       "description": "Import parts, compare packing and ROI, explore what-if scenarios and view charts with OptiPacker.",
-      "version": "0.3.0"
+      "version": "0.3.1"
     }
   ],
   "description": "OptiPacker skills and its project-scoped MCP connector for Claude."
