@@ -1,6 +1,6 @@
 ---
 name: optipacker
-description: Use connected OptiPacker MCP tools to import parts, compare packing alternatives and ROI, explore what-if scenarios, show packing and financial images, and save a chosen financial scenario.
+description: Use connected OptiPacker MCP tools to import parts, compare packing alternatives and ROI, explore what-if scenarios, show packing and financial images, and save a chosen financial scenario. The tools also create draft projects, set production programmes and test cost ranges.
 ---
 
 Use the connected OptiPacker server's advertised tools and input schemas. Tool availability depends on the deployed server, the member's organization role and consent scopes. An absent tool needs a connector upgrade or website handoff. Installing this skill grants no account access.
@@ -12,6 +12,20 @@ Call `get_project_context` to find the granted project, then read its parts and 
 `missingInputs` checks production demand and productive days only. An empty list says nothing about geometry, costs or production approval. Read `missingInputsScope` when present.
 
 Get the member's handling constraints: whether parts may touch, whether bare arranged packing and loose bulk are allowed, and whether packaging must be returnable. Get the objective, production programme and cost scope. Keep unknown costs unknown. A zero or a not-applicable exclusion requires the member's statement.
+
+## Create a project and its production programme
+
+Create a project only when the member asks for one. `create_project` and `set_production_profile` need `projects:write` consent. If a tool is absent, ask the member to connect again with `projects:write` ticked.
+
+Call `create_project` with `name` (2 to 100 characters), an optional `description` (up to 500 characters) and `idempotencyKey`. The member owns the new draft project. The project joins this connection. A connection holds up to 20 projects. A full connection gives `grant_project_limit`. Then ask the member to connect again with fewer projects. The input schema refuses an empty name, a name above 100 characters and a description above 500 characters. The SDK then answers its own text, with `isError: true` and no `structuredContent`. A one-character name gets `invalid_request` with the `field` `name`.
+
+A retry with the same key and the same input returns the same project with `created` false. The same key with another input gives `idempotency_conflict`. Use a new key for each new project.
+
+Ask the member for the programme before you call `set_production_profile`. The call replaces the stored programme and the productive days. Pass `projectId`, `peakAnnualVolume`, `startYear`, `years` and `productiveDaysPerYear`. `peakAnnualVolume` is a whole number from 1 to 1,000,000,000. `startYear` is a year from 2020 to 2100. `productiveDaysPerYear` is a whole number from 1 to 366. `years` holds 1 to 30 rows for consecutive years from `startYear`. Each row holds `year` and either `percentOfPeak` (0 to 100) or `fixedParts` (a whole number from 0 to 1,000,000,000).
+
+The server refuses a part count that is not a whole number or that is above 1,000,000,000. It also refuses more than 30 rows and a row out of year order. A value outside a bound of the website form, such as a start year of 2019, gives `invalid_request` with its `field`. A project with more than 100 ROI analyses, a demand plan or a forecast order gives `invalid_request` with the `field` `projectId`. Then tell the member to set the programme on the website.
+
+A change marks each ROI analysis of the project that the member can update as stale, as a website save does. The same programme again changes nothing and returns `changed` false. Tell the member the SOP year (`sopYear`) and the EOP year (`eopYear`) of the answer. The first year row is the SOP year. The last year row is the EOP year. Neither tool uses an allowance run.
 
 ## Find and recommend containers
 
@@ -37,11 +51,11 @@ For custom loop days, clearances, rotations, costs or supplied protective trays,
 
 For a protective tray, obtain outer and cavity dimensions, rows and columns, wall/edge/floor dimensions, loaded pitch, empty mass, unit price, returnability, replacement rate and evidence. Label agreed test assumptions. Read `reviewBrief.protectedTrays` to the member before confirming. Air gaps alone do not establish protection. Supplied trays remain engineering pending.
 
-Read the returned review brief to the member: programme years and volumes, productive days, part size and weight, gaps and clearances, rotation, loop stages, requirements, baseline, material assumptions, cost coverage and exchange rate. Obtain the four engineering confirmations for the effective quoted values. Do not infer confirmation from a different run or invent it.
+Read the returned review brief to the member. It holds the programme years and volumes, the productive days, the part size and weight, the gaps and clearances, and the rotation. It also holds the loop stages, the requirements, the baseline, the material assumptions, the cost coverage and the exchange rate. Give the member `checks.reviewUrl`. A member of the organization confirms or declines the four engineering checks of the quote on that website page. Do not send `confirmations`. The website decision replaces them. Never claim a confirmation that the website has not recorded.
 
 `exchangeRate.usdRate` is organization-currency units per 1 USD. State it as `1 USD = usdRate currency`; divide an organization-currency price by that rate to enter USD.
 
-Preparation, discovery and asset imports use no allowance run. A completed proposal consumes one run, including an unranked, truncated or no-feasible-option result. Call `run_proposal` with the quote, confirmed checks and one idempotency key. Reuse that key for uncertain retries of the same request. Poll `get_job` no faster than every two seconds. Retrieve `get_proposal` when saved. For a source change, read the changed sources and prepare a new quote.
+Preparation, discovery and asset imports use no allowance run. A completed proposal consumes one run, including an unranked, truncated or no-feasible-option result. Call `run_proposal` with the quote and one idempotency key. Reuse that key for uncertain retries of the same request. On `engineering_check_pending`, give the member `reviewUrl`. Later, call `run_proposal` again with the same quote and key. On `engineering_check_declined`, report `declineReason` to the member. Agree the changed inputs with the member. Then prepare a new quote. Neither answer uses an allowance run. Poll `get_job` no faster than every two seconds. Retrieve `get_proposal` when saved. For a source change, read the changed sources. Then prepare a new quote.
 
 ## Explain the result
 
@@ -52,6 +66,14 @@ For protective trays, show the recorded geometry, cavity count, loaded pitch, em
 Describe a ranked winner as **lowest cost among evaluated eligible options with complete cost inputs**. Point-estimate ordering does not prove that the winner stays cheapest across assumption bands. Capacity alone cannot prove programme-cost optimality. Compare eligible and sampled container counts before saying that containers were skipped. Job progress records work; saved proposal coverage describes the comparison.
 
 An unranked outcome has no cost winner. Partial known costs are incomplete totals. Savings against current packing require a verified baseline; a difference between two new alternatives is an option comparison. Disclose truncated result lists and direct the member to the full saved review. Adoption and engineering approval take place on the website. A computed result or a saved custom box does not certify production readiness.
+
+## Test a cost range of a saved option
+
+Use `get_proposal_sensitivity` when the member asks how a replacement rate or a wash cost range changes the comparison. Pass `proposalId` and `revision` from `get_job`, and `candidateId` of an option with status evaluated in the `get_proposal` answer. Set `field` to `replacementRate` or `washCostPerUnit`. For `replacementRate`, `low` and `high` are yearly fractions from 0 to 1. For `washCostPerUnit`, they are USD prices of one wash of one piece, 0 or more. `low` must not be greater than `high`. Pass `evidence` with the source of the range, up to 2,048 characters. Pass `materialId` when the option has more than one returnable item. A `materialId` refusal lists the returnable items of the option in `items`.
+
+The answer holds `version`, `proposalId`, `revision`, `range`, `low`, `high`, `rankingReversed`, `exchangeRate` and `reviewUrl`. Each end lists the USD costs of each evaluated option, up to 12 options. An end names `lowestCostId` and `lowestInitialCashId` only when an option has `comparableCost`. `rankingReversed` is true when both ends name a `lowestCostId` and the two ids differ. Tell the member when the lowest-cost option changes across the range. `get_proposal` lists up to 5 ranked options and the chosen one. So an end can name an evaluated option that `get_proposal` did not list.
+
+The call saves no result and uses no allowance run. The saved proposal does not change.
 
 ## Compare financial outcomes before choosing
 

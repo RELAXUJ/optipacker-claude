@@ -35,13 +35,13 @@ Claude recommends catalogue containers first. Custom container creation requires
 
 STL transfer needs file/code tools and HTTPS access to the signed storage URL. Before saving, Claude asks for source units and measured part weight, shows material options, and requires a material and cost choice. Enter a part price or explicitly accept the shown raw-material estimate, which excludes manufacturing. Completion prepares the retained mesh for the website viewer and packing. The current limit is 4 MiB with closed geometry.
 
-An older connection needs renewed consent for `models:write` or `containers:write`; existing grants keep their original permissions. Refresh the connector's tools list after an upgrade, then start a new chat. Older chats can retain the earlier tool list.
+An older connection needs renewed consent for `models:write`, `containers:write` or `projects:write`. Existing grants keep their original permissions. Refresh the connector's tools list after an upgrade, then start a new chat. Older chats can retain the earlier tool list.
 
 ROI retrieval, comparison and financial images require optional `roi:read` consent. Saving requires `roi:write` and current project write access. Existing connections must reconnect to grant them. ROI comparisons reuse saved packing and consume no proposal run. What-if is a preview until explicitly saved. Unadopted options can be compared, then adopted on the website before saving an operational ROI analysis. Demand planning remains a separate website action.
 
 Native PNG images are returned in tool results. In Claude web, expand the visualization tool result to open the image preview. A separate image attachment in the assistant's final answer depends on the client; the skill directs Claude to the tool preview when it has not created that attachment.
 
-Preparation, catalogue reads and imports consume no proposal run. A completed comparison consumes one run even when no feasible option exists. The member confirms the effective engineering checks before the run. Claude reports estimates, unknown costs and search limits. Proposal adoption remains on the OptiPacker website.
+Preparation, catalogue reads and imports consume no proposal run. A completed comparison consumes one run even when no feasible option exists. Before the run, a member of your organization confirms or declines the effective engineering checks on the OptiPacker review page that Claude links. A run waits with `engineering_check_pending` until a member confirms, and a decline returns its reason. Claude reports estimates, unknown costs and search limits. Proposal adoption remains on the OptiPacker website.
 
 ## Build and verify
 
