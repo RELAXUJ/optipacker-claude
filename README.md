@@ -30,18 +30,19 @@ Open `/mcp` to authenticate the OptiPacker server. The plugin includes the remot
 - “What if annual demand falls? Keep the original scenario beside that preview.”
 - “Save this ROI scenario and give me its review link. I will decide about demand planning later.”
 - “Create this custom returnable box from my supplied specification, then compare packing this part in it.”
+- “Check whether our decision policy lets you adopt the recommended option. Adopt it only if every rule passes.”
 
 Claude recommends catalogue containers first. Custom container creation requires an organization administrator and supplied engineering facts. It creates a container record for packing, not a manufactured design. The connector lists accessible definitions; it does not track physical stock counts.
 
 STL transfer needs file/code tools and HTTPS access to the signed storage URL. Before saving, Claude asks for source units and measured part weight, shows material options, and requires a material and cost choice. Enter a part price or explicitly accept the shown raw-material estimate, which excludes manufacturing. Completion prepares the retained mesh for the website viewer and packing. The current limit is 4 MiB with closed geometry.
 
-An older connection needs renewed consent for `models:write`, `containers:write` or `projects:write`. Existing grants keep their original permissions. Refresh the connector's tools list after an upgrade, then start a new chat. Older chats can retain the earlier tool list.
+An older connection needs renewed consent for `models:write`, `containers:write`, `projects:write` or `proposals:adopt`. Existing grants keep their original permissions. Refresh the connector's tools list after an upgrade, then start a new chat. Older chats can retain the earlier tool list.
 
-ROI retrieval, comparison and financial images require optional `roi:read` consent. Saving requires `roi:write` and current project write access. Existing connections must reconnect to grant them. ROI comparisons reuse saved packing and consume no proposal run. What-if is a preview until explicitly saved. Unadopted options can be compared, then adopted on the website before saving an operational ROI analysis. Demand planning remains a separate website action.
+ROI retrieval, comparison and financial images require optional `roi:read` consent. Saving requires `roi:write` and current project write access. Existing connections must reconnect to grant them. ROI comparisons reuse saved packing and consume no proposal run. What-if is a preview until explicitly saved. Unadopted options can be compared. An option needs an adoption before you save an operational ROI analysis. A member adopts on the website, or Claude adopts the recommended option with `proposals:adopt`. Demand planning remains a separate website action.
 
 Native PNG images are returned in tool results. In Claude web, expand the visualization tool result to open the image preview. A separate image attachment in the assistant's final answer depends on the client; the skill directs Claude to the tool preview when it has not created that attachment.
 
-Preparation, catalogue reads and imports consume no proposal run. A completed comparison consumes one run even when no feasible option exists. Before the run, a member of your organization confirms or declines the effective engineering checks on the OptiPacker review page that Claude links. A run waits with `engineering_check_pending` until a member confirms, and a decline returns its reason. Claude reports estimates, unknown costs and search limits. Proposal adoption remains on the OptiPacker website.
+Preparation, catalogue reads and imports consume no proposal run. A completed comparison consumes one run even when no feasible option exists. Before the run, a member of your organization confirms or declines the effective engineering checks on the OptiPacker review page that Claude links. If the four check values and the part revision equal the active standing profile of the part, the quote needs no review. A run waits with `engineering_check_pending` until a member confirms, and a decline returns its reason. Claude reports estimates, unknown costs and search limits. A member adopts a proposal option on the OptiPacker website. With the optional `proposals:adopt` consent, Claude adopts only the recommended option of a run, inside the decision policy that your organization administrator sets. You get a notice and a mail of each adoption.
 
 ## Build and verify
 

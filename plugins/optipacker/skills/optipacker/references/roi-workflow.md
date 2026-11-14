@@ -40,6 +40,8 @@ If the response says the image is unavailable, use its reason and link. Do not m
 
 Use `get_roi_analysis` to read a saved analysis. Use `save_roi_scenario` only after the member requests a named save. Pass the scenario and a new idempotency key. Retry the same request with the same key. A changed scenario needs a different key.
 
-An unadopted proposal option returns `adoption_required`. Give its website review link so the member can choose and adopt packing. Do not silently adopt it. After a successful save, return the saved analysis link and offer further what-if work or the demand-planning handoff.
+An unadopted proposal option returns `adoption_required`. Give its website review link. A member whose role the decision policy admits can choose and adopt packing there. With `proposals:adopt`, you can adopt the recommended option with `adopt_proposal_option`, but only on the member's request. An older connection must connect again with `proposals:adopt` ticked. Do not adopt an option that the member did not ask for. After a successful save, return the saved analysis link and offer further what-if work or the demand-planning handoff.
+
+An agent adoption creates the ROI analysis of the option. `roi.analysisId` names it, and `get_roi_analysis` reads it. The case timeline shows the source `mcp` for that first analysis. A later analysis of the same revision shows `website` when a member saves it on the website. It shows `mcp` when an agent saves it with `save_roi_scenario`.
 
 Demand planning requires a saved, complete analysis with a valid packing basis. Follow the returned next actions and website validation. It remains separate from saving ROI and from ordering.

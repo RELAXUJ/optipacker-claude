@@ -1,6 +1,6 @@
 ---
 name: optipacker
-description: Use connected OptiPacker MCP tools to import parts, compare packing alternatives and ROI, explore what-if scenarios, show packing and financial images, and save a chosen financial scenario. The tools also create draft projects, set production programmes and test cost ranges.
+description: Use connected OptiPacker MCP tools to import parts, compare packing alternatives and ROI, explore what-if scenarios, show packing and financial images, and save a chosen financial scenario. The tools also create draft projects, set production programmes, test cost ranges and adopt a recommended option inside the decision policy.
 ---
 
 Use the connected OptiPacker server's advertised tools and input schemas. Tool availability depends on the deployed server, the member's organization role and consent scopes. An absent tool needs a connector upgrade or website handoff. Installing this skill grants no account access.
@@ -23,9 +23,9 @@ A retry with the same key and the same input returns the same project with `crea
 
 Ask the member for the programme before you call `set_production_profile`. The call replaces the stored programme and the productive days. Pass `projectId`, `peakAnnualVolume`, `startYear`, `years` and `productiveDaysPerYear`. `peakAnnualVolume` is a whole number from 1 to 1,000,000,000. `startYear` is a year from 2020 to 2100. `productiveDaysPerYear` is a whole number from 1 to 366. `years` holds 1 to 30 rows for consecutive years from `startYear`. Each row holds `year` and either `percentOfPeak` (0 to 100) or `fixedParts` (a whole number from 0 to 1,000,000,000).
 
-The server refuses a part count that is not a whole number or that is above 1,000,000,000. It also refuses more than 30 rows and a row out of year order. A value outside a bound of the website form, such as a start year of 2019, gives `invalid_request` with its `field`. A project with more than 100 ROI analyses, a demand plan or a forecast order gives `invalid_request` with the `field` `projectId`. Then tell the member to set the programme on the website.
+The server refuses a part count that is not a whole number or that is above 1,000,000,000. It also refuses more than 30 rows and a row out of year order. A value outside a bound of the website form, such as a start year of 2019, gives `invalid_request` with its `field`. A project with more than 100 ROI analyses, a demand plan or a forecast order gives `invalid_request` with the `field` `projectId`. Then tell the member to set the programme on the Production tab of the project settings on the website.
 
-A change marks each ROI analysis of the project that the member can update as stale, as a website save does. The same programme again changes nothing and returns `changed` false. Tell the member the SOP year (`sopYear`) and the EOP year (`eopYear`) of the answer. The first year row is the SOP year. The last year row is the EOP year. Neither tool uses an allowance run.
+A change marks each ROI analysis of the project in the organization as stale, as a website save does. The same programme again changes nothing and returns `changed` false. Tell the member the SOP year (`sopYear`) and the EOP year (`eopYear`) of the answer. The first year row is the SOP year. The last year row is the EOP year. Neither tool uses an allowance run.
 
 ## Find and recommend containers
 
@@ -51,7 +51,7 @@ For custom loop days, clearances, rotations, costs or supplied protective trays,
 
 For a protective tray, obtain outer and cavity dimensions, rows and columns, wall/edge/floor dimensions, loaded pitch, empty mass, unit price, returnability, replacement rate and evidence. Label agreed test assumptions. Read `reviewBrief.protectedTrays` to the member before confirming. Air gaps alone do not establish protection. Supplied trays remain engineering pending.
 
-Read the returned review brief to the member. It holds the programme years and volumes, the productive days, the part size and weight, the gaps and clearances, and the rotation. It also holds the loop stages, the requirements, the baseline, the material assumptions, the cost coverage and the exchange rate. Give the member `checks.reviewUrl`. A member of the organization confirms or declines the four engineering checks of the quote on that website page. Do not send `confirmations`. The website decision replaces them. Never claim a confirmation that the website has not recorded.
+Read the returned review brief to the member. It holds the programme years and volumes, the productive days, the part size and weight, the gaps and clearances, and the rotation. It also holds the loop stages, the requirements, the baseline, the material assumptions, the cost coverage and the exchange rate. If `checks.status` is `confirmed`, a standing profile of the part confirmed the four engineering checks. Then name `checks.profileVersion` and `checks.approvedBy` to the member. Call `run_proposal` before `expiresAt`. A changed check value, also a changed `costScope` reason text, gives a waiting quote that a member must confirm. Otherwise give the member `checks.reviewUrl`. A member of the organization confirms or declines the four engineering checks of the quote on that website page. An engineer or an org_admin of the organization can choose "Confirm and keep as standing profile" there. Later quotes of that part revision with the same four check values then start confirmed. This lasts until the profile ends, a member retires it or its approver has no approver role. Do not send `confirmations`. The website decision or the standing profile replaces them. Never claim a confirmation that the website has not recorded.
 
 `exchangeRate.usdRate` is organization-currency units per 1 USD. State it as `1 USD = usdRate currency`; divide an organization-currency price by that rate to enter USD.
 
@@ -65,7 +65,7 @@ For protective trays, show the recorded geometry, cavity count, loaded pitch, em
 
 Describe a ranked winner as **lowest cost among evaluated eligible options with complete cost inputs**. Point-estimate ordering does not prove that the winner stays cheapest across assumption bands. Capacity alone cannot prove programme-cost optimality. Compare eligible and sampled container counts before saying that containers were skipped. Job progress records work; saved proposal coverage describes the comparison.
 
-An unranked outcome has no cost winner. Partial known costs are incomplete totals. Savings against current packing require a verified baseline; a difference between two new alternatives is an option comparison. Disclose truncated result lists and direct the member to the full saved review. Adoption and engineering approval take place on the website. A computed result or a saved custom box does not certify production readiness.
+An unranked outcome has no cost winner. Partial known costs are incomplete totals. Savings against current packing require a verified baseline. A difference between two new alternatives is an option comparison. Disclose truncated result lists and direct the member to the full saved review. Engineering approval takes place on the website. A member adopts an option on the website, or you adopt the recommended option as "Adopt the recommended option" says. A computed result or a saved custom box does not certify production readiness.
 
 ## Test a cost range of a saved option
 
@@ -85,6 +85,16 @@ Show investment, programme cost, average annual net cashflow, ROI, break-even an
 
 No separate financial-only organization role exists in the current app. Financial tools require `roi:read` consent and current access to the source project. Saving also requires `roi:write` and project write access. If a financial tool is absent, explain the required consent and offer the website review. Do not request unrelated asset-write permissions.
 
+## Adopt the recommended option
+
+Adopt an option only when the member asks for it. `adopt_proposal_option` needs `proposals:adopt` consent. If the tool is absent, ask the member to connect again with `proposals:adopt` ticked. An org_admin sets the decision policy of the organization on the website. The tool adopts only the recommended option of a saved revision, and only inside that policy.
+
+Pass `proposalId` and `revision` from `get_job`, `candidateId` of the recommended option and a new `idempotencyKey`. Call with `dryRun: true` first. A dry run writes nothing. It checks the ten rules only. The adoption also runs the website checks, so `adoptable` true does not promise the adoption. Tell the member `adoptable`, `failedRules`, `configurationsToArchive` and `demandPlansToMarkStale`. Adopt only after the member agrees, with the same input and no `dryRun`.
+
+On `policy_not_met`, name each rule of `failedRules` to the member. Give the member `reviewUrl`, because a member can adopt the option on the website. On `already_adopted`, give `reviewUrl` and do not adopt again. On `source_changed`, prepare and run the proposal again.
+
+The answer holds `configId`, `policyVersion`, `roi` and `reviewUrl`. The `roi.status` `saved` gives `roi.analysisId`, the ROI analysis of the option. The status `open-costs` means that open costs stop the analysis. The status `failed` gives `nextStep`: call the tool again with the same key. A retry with the same key returns the same adoption and creates a missing ROI analysis. The member who connected you gets a notice and a mail of each adoption. The call uses no allowance run.
+
 ## Explore, save and continue
 
 Use sparse what-if assumptions to answer a question such as lower demand or higher replacement costs. For tray or insert replacement, copy `materialId` from `assumptions.materials[]` and use `returnableSystemCosts.bomReplacementRates`; the global replacement rate skips inserts and trays. Read the what-if reference before constructing these overrides. Label changed assumptions and keep the original next to the preview. Previewing does not save, adopt packing or update project settings. A different packing layout needs another evaluated option or a new packing run.
@@ -95,4 +105,4 @@ Explain an unavailable image from its returned reason. The packing image shows p
 
 After the comparison, offer the actions that the response makes available: keep exploring, review on the website, explicitly save the named ROI scenario, or continue to demand planning. Call `save_roi_scenario` only when the member asks to save. Reuse its idempotency key after an uncertain response. Return the saved analysis link.
 
-An unadopted proposal can be compared but needs adoption on the website before its ROI becomes a saved operational analysis. Follow `adoption_required` and its review link; never silently adopt a design to make saving succeed. Demand planning is optional after a saved eligible analysis. Use the website handoff and its existing validation. Saving ROI does not create a plan, issue an order or apply what-if values to the project.
+An unadopted proposal can be compared, but it needs an adoption before its ROI becomes a saved operational analysis. A member adopts on the website. With `proposals:adopt` and on the member's request, you can adopt the recommended option with `adopt_proposal_option`. On `adoption_required`, give the member its review link. Never adopt a design only to make saving succeed. Demand planning is optional after a saved eligible analysis. Use the website handoff and its existing validation. Saving ROI does not create a plan, issue an order or apply what-if values to the project.
