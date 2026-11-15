@@ -46,6 +46,8 @@ Preparation, catalogue reads and imports consume no proposal run. A completed co
 
 ## Build and verify
 
+For unattended work, request an unattended connection during consent. An organization administrator approves and renews its UTC end date in Settings, Connected agents. Approved unattended runs require a standing engineering profile, and unattended connections cannot adopt packing. A daily source watch records changes to adopted packing without starting a run or changing the packing. `list_agent_events` reads pending checks, finished runs, source changes and ending profiles within the connection's projects. See the skill's [connection and events reference](plugins/optipacker/skills/optipacker/references/unattended-and-events.md).
+
 ```sh
 python -m unittest discover -s tests
 python scripts/package_skill.py dist/optipacker.zip
