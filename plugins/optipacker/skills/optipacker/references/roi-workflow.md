@@ -28,6 +28,12 @@ The returned average annual net cashflow, ROI, investment and break-even belong 
 
 `cumulativeReturnRoi` is a decimal ratio: `0.25` means 25%. `combinedRoiPercent` and `irrPercent` are already percentages. Use `cashflowGranularity` for the period labels.
 
+## Unavailable scenarios and missing income
+
+If a proposal scenario has `status: "unavailable"` and `missingCosts`, name each entry to the member. Each entry gives the `category`, the `label`, the `item` (container, insert or pallet) and the `itemName` of the BOM row. A logistics entry can list `logisticsInputGaps`. Follow `nextStep`: ask the member for each value or for an exclusion with a reason. Then call `prepare_proposal` for a new run. Put exclusions in `costScope` and amounts in `overrides.costOptions`. Do not invent a cost.
+
+If `assumptions.incomeBasis` is `calculated_recovery_charge`, the scenario has no income input. Income then only recovers cost. Net cashflow, ROI, NPV, IRR and break-even are `null`, and `metrics.returnMetricsReason` gives the reason. Show the programme cost, the investment and the cost per delivered part. Ask the member for a packaging budget or an income per part in USD. Then calculate a what-if with `whatIf.incomePerPartLifetime`. With `fixed_charge`, the return metrics are calculated.
+
 ## Images in chat
 
 Call `get_visualization` with `kind: "roi"` and the same scenarios to obtain a comparison chart. Use `kind: "packing"` with the saved proposal reference and candidate ID for stored part position bounds. The MCP returns an image content block plus accessible metadata. Show the image with its figures and review link. Tray bodies and cavities are not drawn. Retain returned `packingContext`, including the protective tray specification and engineering pending status, beside images, financial previews and saved ROI.

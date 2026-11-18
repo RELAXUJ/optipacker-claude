@@ -91,6 +91,8 @@ Read [references/roi-workflow.md](references/roi-workflow.md) for inputs, what-i
 
 Show investment, programme cost, average annual net cashflow, ROI, break-even and unavailable metrics with their units and period. The internal annualSavings field means average annual net cashflow. It does not establish savings against existing packing. Explain different demand profiles, programme periods, cost coverage and sources before comparing figures. Do not rank incomparable scenarios as a common winner.
 
+If a scenario is unavailable, name its `missingCosts` and follow its `nextStep`. If `assumptions.incomeBasis` is `calculated_recovery_charge`, the return metrics are `null`. Ask the member for a packaging budget or `whatIf.incomePerPartLifetime` in USD before you show ROI, IRR or break-even.
+
 No separate financial-only organization role exists in the current app. Financial tools require `roi:read` consent and current access to the source project. Saving also requires `roi:write` and project write access. If a financial tool is absent, explain the required consent and offer the website review. Do not request unrelated asset-write permissions.
 
 ## Adopt the recommended option
