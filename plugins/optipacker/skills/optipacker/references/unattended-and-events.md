@@ -12,7 +12,7 @@ For the same member and client, a new personal consent replaces earlier personal
 
 ## Start an unattended run
 
-An approved unattended connection starts a proposal run only through a standing engineering profile. The profile must match the part revision and all four engineering checks of the prepared quote. Its approver must still have an approver role, and its end date must still allow preparation. Give the member the website review link when a profile needs approval or renewal. Never claim to approve checks or renew access in chat.
+An approved unattended connection starts a proposal run only through a standing engineering profile. The profile must match the part revision, all four engineering checks, the supplied trays and the explicit coverage entries of the prepared quote. Evidence text does not count. Its approver must still have an approver role, and its end date must still allow preparation. Give the member the website review link when a profile needs approval or renewal. Never claim to approve checks or renew access in chat.
 
 Approval and profiles do not remove the paid-run requirement. A completed calculation uses one proposal run. Start one only within the member's requested task and budget. Preserve one idempotency key when retrying the same request. A source-change notice gives no permission to calculate again.
 
