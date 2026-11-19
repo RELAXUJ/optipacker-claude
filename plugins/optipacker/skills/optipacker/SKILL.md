@@ -17,7 +17,7 @@ For the selected linked part, call `get_project_context` with both `projectId` a
 
 `missingInputs` checks production demand and productive days only. An empty list says nothing about geometry, costs or production approval. Read `missingInputsScope` when present.
 
-Get the member's handling constraints: whether parts may touch, whether bare arranged packing and loose bulk are allowed, and whether packaging must be returnable. Get the objective, production programme and cost scope. Keep unknown costs unknown. A zero or a not-applicable exclusion requires the member's statement.
+Get the member's handling constraints: whether parts may touch, whether bare arranged packing and loose bulk are allowed, and whether packaging must be returnable. Get the objective, production programme and cost scope. Before the first preparation, ask about the cost types that [references/cost-gaps.md](references/cost-gaps.md) lists. Keep unknown costs unknown. A zero or a not-applicable exclusion requires the member's statement.
 
 ## Create a project and its production programme
 
@@ -41,6 +41,8 @@ Show recorded container names, usable internal size, tare weight, maximum part p
 
 Recommend catalogue containers first. Pass verified container IDs to `prepare_proposal` for calculation with the selected part. Explain the recommendation using evaluated capacity, fit constraints, payload, cost coverage, estimated assumptions and the requested objective. Quote the bounded search scope.
 
+OptiPacker catalogue blisters are not container records, and `list_containers` lists none. With current catalogue offers, `prepare_proposal` fits catalogue blisters by itself in each container in scope. With `noPartContact` true, or without bare arranged packing and bulk, the run keeps only containers that hold a catalogue blister or a supplied tray. When the member asks for standard blister packing, pass the container scope and the requirements. Do not search for a blister and do not ask for a tray design. Use `overrides.protectedTrays` only for a tray design that the member supplies.
+
 For a requested custom box, read [references/custom-container.md](references/custom-container.md). The member must supply the engineering dimensions and load rating. The tool creates a saved container definition that can be used in a packing run.
 
 ## Import an STL attachment
@@ -60,6 +62,8 @@ For custom loop days, clearances, rotations, costs or supplied protective trays,
 For a protective tray, obtain outer and cavity dimensions, rows and columns, wall/edge/floor dimensions, loaded pitch, empty mass, unit price, returnability, replacement rate and evidence. Label agreed test assumptions. Read `reviewBrief.protectedTrays` to the member before confirming. Air gaps alone do not establish protection. Supplied trays remain engineering pending.
 
 Read the returned review brief to the member. It holds the programme years and volumes, the productive days, the part size and weight, the gaps and clearances, and the rotation. It also holds the loop stages, the requirements, the baseline, the material assumptions, the cost coverage and the exchange rate. If `checks.status` is `confirmed`, a standing profile of the part confirmed the four engineering checks. Then name `checks.profileVersion` and `checks.approvedBy` to the member. Call `run_proposal` before `expiresAt`. A changed check value, also a changed `costScope` reason text, gives a waiting quote that a member must confirm. A changed, added or removed supplied tray or coverage entry outside the cost scope check also gives a waiting quote. Otherwise give the member `checks.reviewUrl`. A member of the organization confirms or declines the four engineering checks of the quote on that website page. An engineer or an org_admin of the organization can choose "Confirm and keep as standing profile" there. Later quotes of that part revision with the same four check values, supplied trays and coverage entries then start confirmed. Reworded evidence text does not matter. This lasts until the profile ends, a member retires it or its approver has no approver role. Do not send `confirmations`. The website decision or the standing profile replaces them. Never claim a confirmation that the website has not recorded.
+
+Before `run_proposal`, read [references/cost-gaps.md](references/cost-gaps.md) and `costGaps` of the answer. Tell the member each cost that will stay unknown and its item. Explain the effect in plain words: an option with an unknown cost gets no rank, and its known total is lower than the real cost. Ask the member to give an amount, state that the cost does not apply, or accept the gap. Never fill a value, a zero or an exclusion yourself. For a new amount or exclusion, prepare again.
 
 `exchangeRate.usdRate` is organization-currency units per 1 USD. State it as `1 USD = usdRate currency`; divide an organization-currency price by that rate to enter USD.
 
