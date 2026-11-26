@@ -20,6 +20,15 @@ The skill teaches the workflow. The connector provides account access. Each is i
 
 Open `/mcp` to authenticate the OptiPacker server. The plugin includes the remote HTTP connector and the skill. See [Anthropic's marketplace guide](https://code.claude.com/docs/en/plugin-marketplaces).
 
+## Updates
+
+The skill checks its version in each conversation. It passes its version to `get_project_context`, and the server compares it with the version of this repository. If a newer version exists, Claude tells you once and gives the steps for your client.
+
+- Claude Code: turn on auto-update once. Open `/plugin`, select Marketplaces, select optipacker and turn on auto-update. Later versions then install at startup. To update now, run `claude plugin marketplace update optipacker` and `claude plugin update optipacker@optipacker`, then `/reload-plugins`. Claude can run these commands for you after you agree.
+- Claude web and desktop: download the latest [optipacker.zip](https://github.com/RELAXUJ/optipacker-claude/releases/latest/download/optipacker.zip). In Customize > Skills, delete the optipacker skill, upload the ZIP and turn it on.
+
+The connector runs on the OptiPacker server, so it needs no update. Claude tells you when your tool list is older than the server, or when a request needs a permission that your connection does not hold. Then reconnect the connector and start a new chat.
+
 ## Requests to try
 
 - “Which returnable containers can I use for this project? Show internal dimensions, payload limits and prices.”
@@ -52,5 +61,7 @@ For unattended work, request an unattended connection during consent. An organiz
 python -m unittest discover -s tests
 python scripts/package_skill.py dist/optipacker.zip
 ```
+
+To publish a version, raise it in `plugin.json`, the `marketplace.json` entry and the version lines of `SKILL.md`, and commit. Then run `python scripts/publish_release.py --notes "What changed."`. The script refuses version marks that differ and a version that already has a release. It pushes the files to `main` of the public repository, tags the version and creates the release with the ZIP. Add `--dry-run` to stop before the push.
 
 The ZIP contains an `optipacker/` folder with `SKILL.md`, references and the upload helper. Python's standard library is sufficient. Credentials and uploaded parts belong to your session and account and are never part of this repository.

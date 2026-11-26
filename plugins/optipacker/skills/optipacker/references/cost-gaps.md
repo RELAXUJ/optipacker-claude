@@ -33,5 +33,7 @@ Never fill a value, a zero or an exclusion yourself. Never derive the cost of on
 - `condition: returnable_blister`: the gap applies if the fitted catalogue blister is returnable.
 - `condition: blister_with_unpriced_charge`: a catalogue tooling charge has no price. Only acceptance closes it. The website review names the charge.
 - `condition: project_logistics_incomplete`: the run calculates logistics from the project logistics settings.
+- `condition: container_without_price`: the container has no unit price in the library. Ask the member for the price and its source. An organization administrator can then call `copy_container`, which copies the container into the project with that price; prepare again with the returned `containerId`. Otherwise the member accepts the gap. Tell the member that the option of this container keeps an unknown purchase cost and gets no rank. A member can still adopt it on the website, without an ROI analysis. Never give a price yourself.
 - An annual total of washing, maintenance or disposal has no input in MCP or on the website. Ask for the cost of one piece, or for acceptance of the gap.
-- The forecast holds no figure. The run can still find a gap, for example a container without a price.
+- `containersTooSmall` lists the selected containers that cannot hold the part. The run refuses them, so do not ask the member about their costs.
+- The forecast holds no figure. The run can still find a gap that the quote inputs do not show.
